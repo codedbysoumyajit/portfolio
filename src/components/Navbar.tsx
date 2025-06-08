@@ -9,9 +9,14 @@ const Navbar: React.FC = () => {
             let current = '';
 
             sections.forEach(section => {
-                const sectionTop = section.offsetTop;
+                // Type assertion for HTMLElement
+                const htmlSection = section as HTMLElement; 
+                const sectionTop = htmlSection.offsetTop;
+                // Removed 'sectionHeight' as it was not being used
+                // const sectionHeight = htmlSection.clientHeight; 
+
                 if (window.scrollY >= (sectionTop - 250)) {
-                    current = section.getAttribute('id') || '';
+                    current = htmlSection.getAttribute('id') || '';
                 }
             });
             setActiveSection(current);

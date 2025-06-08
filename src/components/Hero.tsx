@@ -9,16 +9,16 @@ const Hero: React.FC = () => {
 
     // Typing animation effect
     useEffect(() => {
-        let timer: NodeJS.Timeout;
+        let timer: number; // Changed from NodeJS.Timeout to number
 
         const typeEffect = () => {
             const currentText = texts[textIndex];
 
             if (isDeleting) {
-                setTypedText(prev => currentText.substring(0, charIndex - 1));
+                setTypedText(currentText.substring(0, charIndex - 1)); // Removed 'prev'
                 setCharIndex(prev => prev - 1);
             } else {
-                setTypedText(prev => currentText.substring(0, charIndex + 1));
+                setTypedText(currentText.substring(0, charIndex + 1)); // Removed 'prev'
                 setCharIndex(prev => prev + 1);
             }
 
@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
         timer = setTimeout(typeEffect, 200); // Initial delay (reduced from 300ms to 200ms)
 
         return () => clearTimeout(timer);
-    }, [charIndex, isDeleting, textIndex]);
+    }, [charIndex, isDeleting, textIndex, texts]); // Added 'texts' to dependencies to avoid lint warning if used in effect
 
     // Parallax effect (remains the same)
     useEffect(() => {
