@@ -29,7 +29,7 @@ Welcome to my interactive developer portfolio – a carefully crafted showcase o
 
 1. **Clone repository**:
    ```bash
-   git clone https://github.com/your-username/portfolio.git
+   git clone https://github.com/codedbysoumyajit/portfolio.git
    cd portfolio
    ```
 
