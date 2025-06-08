@@ -1,0 +1,624 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #00ff41;
+            --secondary-green: #008f11;
+            --dark-bg: #0d1117;
+            --darker-bg: #010409;
+            --card-bg: #161b22;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --border-color: #21262d;
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-green);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-green);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000; /* High z-index to always be on top */
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-green);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-green);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* Changed to column to stack content and arrow */
+            align-items: center;
+            justify-content: center; /* Initial center alignment */
+            text-align: center;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            position: relative;
+            overflow: hidden;
+            z-index: 0; /* Base z-index for the hero section */
+        }
+
+        .hero::before,
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: -1; /* Place patterns behind hero-content and hero-arrow */
+        }
+
+        .hero::before {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.08"><text y=".9em" font-size="90" fill="%23008f11" font-family="sans-serif" font-weight="bold">_</text></svg>');
+            background-size: 80px 80px;
+            animation: float 25s ease-in-out infinite;
+        }
+
+        .hero::after {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" opacity="0.04"><circle cx="1" cy="1" r="0.5" fill="%2300ff41"/><circle cx="6" cy="6" r="0.5" fill="%2300ff41"/></svg>');
+            background-size: 20px 20px;
+            animation: float 15s ease-in-out infinite reverse, moveDiagonal 30s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            50% { transform: translateY(-30px) translateX(20px); }
+        }
+
+        @keyframes moveDiagonal {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1; /* Hero content explicitly above patterns */
+            padding: 0 1rem;
+            /* Adjust flex properties to control spacing better */
+            flex-grow: 1; /* Allow hero content to take up available space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertically center within its available space */
+            align-items: center; /* Horizontally center text */
+            padding-bottom: 2rem; /* Add some padding at the bottom of the content itself */
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--primary-green);
+            opacity: 0;
+            animation: slideInUp 1s ease 0.5s forwards;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideInUp 1s ease 1s forwards;
+        }
+
+        .typing-text {
+            font-size: 1.7rem;
+            color: var(--primary-green);
+            opacity: 0;
+            animation: slideInUp 1s ease 1.5s forwards;
+            min-height: 2rem;
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section Arrow */
+        .hero-arrow {
+            position: relative; /* Stays relative within the flex container */
+            margin-bottom: 3rem; /* Reduced space from the bottom edge of the hero */
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            animation: bounce 2s infinite;
+            z-index: 2; /* Explicitly above hero-content and patterns */
+        }
+
+        .hero-arrow i {
+            transition: transform 0.3s ease;
+        }
+
+        .hero-arrow i:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1; /* This is crucial for sections to stack above the hero */
+            background-color: var(--dark-bg); /* Ensure solid background to cover hero */
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 3.5rem;
+            text-align: center;
+            color: var(--primary-green);
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '$ ';
+            color: var(--primary-green);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background: var(--primary-green);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr; /* This is from before when you had an image */
+            gap: 3rem;
+            align-items: center;
+            /* Added styles to center text when only text is present */
+            grid-template-columns: 1fr; /* Force single column if only text */
+            text-align: center; /* Center text */
+            max-width: 800px; /* Limit width for readability */
+            margin: 0 auto; /* Center the content block */
+        }
+
+        /* Removed .about-image as it's not in HTML, but keeping for reference if you add it back */
+        .about-image {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: var(--dark-bg);
+            margin: 0 auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .about-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+        }
+
+        .about-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            /* max-width: 800px; This is now on .about-content */
+            /* margin: 0 auto; This is now on .about-content */
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .skill-category h3 {
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .skill-category h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: var(--primary-green);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0 1rem;
+        }
+
+        .skill-tag {
+            background: var(--darker-bg);
+            color: var(--text-primary);
+            padding: 0.7rem 1.4rem;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            transition: all 0.3s ease, background 0.15s ease, color 0.15s ease;
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-tag:hover {
+            background: var(--primary-green);
+            color: var(--dark-bg);
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 255, 65, 0.6);
+        }
+
+        .skill-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: all 0.7s ease;
+        }
+
+        .skill-tag:hover::before {
+            left: 100%;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem; /* Increased gap between project cards */
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-green);
+            box-shadow: 0 8px 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .project-header {
+            background: var(--darker-bg);
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .project-title {
+            color: var(--primary-green);
+            font-size: 1.35rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-tech {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .project-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-description {
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        .project-link {
+            color: var(--primary-green);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--primary-green);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-link:hover {
+            background: var(--primary-green);
+            color: var(--dark-bg);
+            box-shadow: 0 2px 10px rgba(0, 255, 65, 0.4);
+        }
+
+        /* Social Media Section */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 1rem 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .social-link:hover {
+            color: var(--primary-green);
+            border-color: var(--primary-green);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.2);
+        }
+
+        .social-icon {
+            font-size: 1.8rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker-bg);
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            .hero .subtitle {
+                font-size: 1.3rem;
+            }
+            .typing-text {
+                font-size: 1.6rem;
+            }
+            .section-title {
+                font-size: 2.4rem;
+            }
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            /* .about-image { margin-bottom: 2rem; } - Removed since no image */
+            .skills-grid, .projects-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            .section {
+                padding: 4rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .nav-container {
+                justify-content: center;
+            }
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+            .typing-text {
+                font-size: 1.3rem;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .about-text {
+                font-size: 1rem;
+            }
+            .skill-category h3 {
+                font-size: 1.3rem;
+            }
+            .project-title {
+                font-size: 1.2rem;
+            }
+            .project-description {
+                font-size: 0.95rem;
+            }
+            .social-link {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+            .social-icon {
+                font-size: 1.5rem;
+            }
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero .subtitle {
+                font-size: 0.9rem;
+            }
+            .typing-text {
+                font-size: 1.1rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .about-image { /* Keeping in case you add it back, but not in current HTML */
+                width: 200px;
+                height: 200px;
+                font-size: 3.5rem;
+            }
+            .skill-tag {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            .project-link {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+            .social-links {
+                gap: 1rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
